@@ -1,8 +1,15 @@
+'use client';
+
+import { useState } from 'react';
 import SearchBar from '@/components/SearchBar';
 import URLPlayer from '@/components/URLPlayer';
+import DurationFilter from '@/components/DurationFilter';
+import { VideoDuration } from '@/lib/youtube';
 import Link from 'next/link';
 
 export default function Home() {
+  const [selectedDuration, setSelectedDuration] = useState<VideoDuration>('all');
+
   return (
     <div className="min-h-screen bg-white dark:bg-black flex flex-col">
       <header className="border-b border-gray-200 dark:border-gray-800">
@@ -22,11 +29,13 @@ export default function Home() {
             Calm Watching
           </h1>
           <div className="space-y-8">
+            <DurationFilter selectedDuration={selectedDuration} onDurationChange={setSelectedDuration} />
+            
             <div>
               <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
                 Search & Discover
               </h2>
-              <SearchBar />
+              <SearchBar videoDuration={selectedDuration} />
             </div>
 
             <div className="relative">

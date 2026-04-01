@@ -1,6 +1,8 @@
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const API_BASE = 'https://www.googleapis.com/youtube/v3';
 
+export type VideoDuration = 'all' | 'short' | 'medium' | 'long';
+
 export interface YouTubeVideo {
   videoId: string;
   title: string;
@@ -38,7 +40,7 @@ function parseDuration(duration: string): string {
 /**
  * Search for videos using the YouTube API
  */
-export async function searchVideos(query: string, maxResults: number = 20, pageToken?: string | null) {
+export async function searchVideos(query: string, maxResults: number = 20, pageToken?: string | null, videoDuration: VideoDuration = 'all') {
   if (!API_KEY) {
     throw new Error('YouTube API key not configured. Set NEXT_PUBLIC_YOUTUBE_API_KEY env var.');
   }
@@ -51,6 +53,7 @@ export async function searchVideos(query: string, maxResults: number = 20, pageT
       type: 'video',
       maxResults: maxResults.toString(),
       ...(pageToken && { pageToken }),
+      ...(videoDuration !== 'all' && { videoDuration }),
     });
 
     const response = await fetch(`${API_BASE}/search?${params}`);
@@ -115,7 +118,6 @@ export async function getVideoDetails(videoId: string): Promise<YouTubeVideo> {
       key: API_KEY,
       part: 'snippet,contentDetails',
       id: videoId,
-      duration: parseDuration(item.contentDetails.duration),
     });
 
     const response = await fetch(`${API_BASE}/videos?${params}`);
@@ -139,6 +141,7 @@ export async function getVideoDetails(videoId: string): Promise<YouTubeVideo> {
       thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
       description: item.snippet.description,
       publishedAt: item.snippet.publishedAt,
+      duration: parseDuration(item.contentDetails.duration),
     };
   } catch (error) {
     console.error('Error fetching video details:', error);

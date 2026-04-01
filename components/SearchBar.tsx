@@ -2,15 +2,24 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { VideoDuration } from '@/lib/youtube';
 
-export default function SearchBar() {
+interface SearchBarProps {
+  videoDuration?: VideoDuration;
+}
+
+export default function SearchBar({ videoDuration = 'all' }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const router = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/results?q=${encodeURIComponent(query)}`);
+      const params = new URLSearchParams({
+        q: query,
+        ...(videoDuration !== 'all' && { duration: videoDuration }),
+      });
+      router.push(`/results?${params.toString()}`);
     }
   };
 
