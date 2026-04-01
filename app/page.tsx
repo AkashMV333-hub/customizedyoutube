@@ -1,4 +1,5 @@
 import SearchBar from '@/components/SearchBar';
+import URLPlayer from '@/components/URLPlayer';
 import Link from 'next/link';
 
 export default function Home() {
@@ -20,7 +21,27 @@ export default function Home() {
           <h1 className="text-center mb-8 text-3xl font-light text-gray-900 dark:text-white">
             Calm Watching
           </h1>
-          <SearchBar />
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                Search & Discover
+              </h2>
+              <SearchBar />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-black text-gray-500 dark:text-gray-400">
+                  Or
+                </span>
+              </div>
+            </div>
+
+            <URLPlayer />
+          </div>
         </div>
       </main>
     </div>
