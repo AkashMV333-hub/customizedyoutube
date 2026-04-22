@@ -82,7 +82,7 @@ export async function searchVideos(query: string, maxResults: number = 20, pageT
     const durationResponse = await fetch(`${API_BASE}/videos?${durationParams}`);
     if (durationResponse.ok) {
       const durationData = await durationResponse.json();
-      const durationMap = new Map(
+      const durationMap = new Map<string, string>(
         durationData.items.map((item: any) => [
           item.id,
           parseDuration(item.contentDetails.duration)
