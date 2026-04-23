@@ -10,6 +10,7 @@ export interface YouTubeVideo {
   thumbnail: string;
   description: string;
   publishedAt: string;
+  duration?: string;
 }
 
 export interface SearchResult {
